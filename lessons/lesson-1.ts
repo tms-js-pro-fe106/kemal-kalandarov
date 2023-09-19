@@ -2,6 +2,18 @@ let isHidden: boolean = true;
 const total: number = 12312;
 const someStr: string = "asd";
 
+interface MyButtonProps {
+  label: string;
+  disabled: boolean;
+  color: string;
+}
+
+function MyButton(props: MyButtonProps) {}
+
+type MyGreyButtonPros = Pick<MyButtonProps, "color" | "label">;
+
+function MyGreyButton(props: Omit<MyButtonProps, "color">) {}
+
 function sum(a: number, b: number): number | null {
   if (a === null || b === null) {
     return null;
@@ -27,13 +39,17 @@ const obj1: Obj1 = {
 
 const array: Array<number | string | boolean> = [1, 0, true, 5];
 
+class Flyable {
+  fly() {}
+}
+
 class Animal {
-  constructor(name: string, public weight: number) {
+  constructor(name: string, public readonly weight: number) {
     this.name = name;
   }
 
   private name: string;
-  private breed: string;
+  protected breed: string;
   size: "S" | "M" | "L";
 
   setName(newName: string, threadName: string = "main") {
@@ -48,6 +64,27 @@ class Animal {
 
   makeSound() {}
 }
+
+class Duck extends Animal {
+  constructor(
+    name: string,
+    public readonly weight: number,
+    public skills: Flyable
+  ) {
+    super(name, weight);
+  }
+
+  makeSound(): void {
+    this.skills.fly();
+    console.log("кря");
+  }
+
+  fly() {
+    this.skills.fly();
+  }
+}
+
+const aaaa = new Duck("", 4, new Flyable());
 
 class Dog extends Animal {
   makeSound(): void {
@@ -91,6 +128,10 @@ class Line {
   start: Point;
   end: Point;
 
+  static printMeta() {
+    console.log("class metadata");
+  }
+
   print() {
     console.log(
       `start: ${this.start.x}, ${this.start.y}, end: ${this.end.x}, ${this.end.y}`
@@ -102,7 +143,6 @@ const p1 = new Point(0, 10);
 
 const p2 = new Point(20, 30);
 const myLine = new Line(p1, p2);
-myLine.print();
 
 // ? sdfsdvds
 
@@ -117,6 +157,13 @@ const configObj: ConnectConfig = {
   host: "https://mydb.kemalkalandarov.com",
   port: 3000,
 };
+
+function sum2<T>(a: T, b: T) {
+  return a + b;
+}
+
+sum2(0, 9);
+sum2<string>("123", "123");
 
 abstract class Database<ConfType> {
   abstract connect(config: ConfType);
@@ -149,3 +196,5 @@ if ("pg" === "pg") {
 }
 
 db.disconnect();
+
+"asdasd".includes("");
